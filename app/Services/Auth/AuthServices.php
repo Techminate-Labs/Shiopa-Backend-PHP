@@ -26,6 +26,7 @@ class AuthServices{
 
         $user = $this->ri->userCreate([
             'role_id' => $fields['role_id'],
+            'is_admin' => 1,
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password'])
@@ -65,6 +66,38 @@ class AuthServices{
         ];
 
         return response($response, 200);
+    }
+
+    public function loginAdmin($request) {
+        $fields = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        // Check email
+        $user = $this->ri->userGetByEmail($fields['email']);
+        if($user->is_admin == true){
+            if(!$user || !Hash::check($fields['password'], $user->password)) {
+                return response([
+                    'message' => 'Email or Password Did Not Match!'
+                ], 401);
+            }
+    
+            $token = $user->createToken('myapptoken')->plainTextToken;
+    
+            $response = [
+                'user' => $user,
+                'token' => $token,
+            ];
+    
+            return response($response, 200);
+        }else{
+            $response = [
+                'user' => 'You are not Authorized',
+            ];
+    
+            return response($response, 401);
+        }
     }
 
     public function logout(){

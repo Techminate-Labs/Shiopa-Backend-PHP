@@ -6,6 +6,7 @@ class UserFormat{
     public function formatList($user){
         return[
             'user_id' => $user->id,
+            'is_admin' => $user->is_admin,
             'role' => $user->role->name,
             'name' => $user->name,
             'email' => $user->email,

@@ -24,8 +24,9 @@ Route::middleware('auth:sanctum','verified')->get('/user', function (Request $re
 });
 
 // Public routes
-// Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/loginAdmin', [AuthController::class, 'loginAdmin']);
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
 Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 
@@ -33,7 +34,7 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Auth
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/registerUser', [AuthController::class, 'registerUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail']);
     Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
