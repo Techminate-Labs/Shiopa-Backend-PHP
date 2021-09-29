@@ -16,12 +16,16 @@ class AuthController extends Controller
         $this->services = $authServices;
     }
 
-    public function register(Request $request) {
-        return $this->services->userCreate($request);
+    public function registerCustomer(Request $request) {
+        return $this->services->registerCustomer($request);
     }
 
-    public function login(Request $request) {
-        return $this->services->login($request);
+    public function registerAdmin(Request $request) {
+        return $this->services->registerAdmin($request);
+    }
+
+    public function loginCustomer(Request $request) {
+        return $this->services->loginCustomer($request);
     }
 
     public function loginAdmin(Request $request) {

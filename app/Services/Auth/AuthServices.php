@@ -16,17 +16,16 @@ class AuthServices{
         $this->ri = $repositoryInterface;
     }
 
-    public function userCreate($request){
+    public function registerCustomer($request){
         $fields = $request->validate([
-            'role_id'=>'required',
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed'
         ]);
 
         $user = $this->ri->userCreate([
-            'role_id' => $fields['role_id'],
-            'is_admin' => 1,
+            'role_id' => '0',
+            'is_admin' => 0,
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password'])
@@ -42,7 +41,41 @@ class AuthServices{
         return response($response, 201);
     }
 
-    public function login($request) {
+    public function registerAdmin($request){
+        if(auth()->user()->is_admin == true){
+            $fields = $request->validate([
+                'role_id'=>'required',
+                'name' => 'required|string',
+                'email' => 'required|string|unique:users,email',
+                'password' => 'required|string|confirmed'
+            ]);
+    
+            $user = $this->ri->userCreate([
+                'role_id' => $fields['role_id'],
+                'is_admin' => 1,
+                'name' => $fields['name'],
+                'email' => $fields['email'],
+                'password' => bcrypt($fields['password'])
+            ]);
+    
+            $token = $user->createToken('myapptoken')->plainTextToken;
+    
+            $response = [
+                'user' => $user,
+                'token' => $token
+            ];
+    
+            return response($response, 201);
+        }else{
+            $response = [
+                'user' => 'You are not Authorized',
+            ];
+    
+            return response($response, 401);
+        }
+    }
+
+    public function loginCustomer($request) {
         $fields = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string'
