@@ -22,12 +22,23 @@ class UserSeeder extends Seeder
             'updated_at' => now()
         ]);
 
-        
         DB::table('roles')->insert([
-            'name'=>'cashier',
+            'name'=>'manager',
             'permissions'=> '[{"Users":{"create":false,"view":false,"edit":false,"delete":false,"list":false}},{"Roles":{"create":true,"view":false,"edit":true,"delete":true,"list":false}}]',
             'created_at' => now(),
             'updated_at' => now()
+        ]);
+
+        DB::table('users')->insert([
+            'role_id' => '0',
+            'is_admin' => '0',
+            'name' => 'Customer',
+            'email' => 'customer@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('123456'),
+            'created_at' => now(),
+            'updated_at' => now()
+            
         ]);
 
         DB::table('users')->insert([
@@ -44,7 +55,7 @@ class UserSeeder extends Seeder
 
         DB::table('users')->insert([
             'role_id' => '2',
-            'is_admin' => '0',
+            'is_admin' => '1',
             'name' => 'Sazid',
             'email' => 'sazidahmed.official@gmail.com',
             'email_verified_at' => now(),
