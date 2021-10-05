@@ -23,11 +23,12 @@ class CreateItemsTable extends Migration
             $table->string('name');
             $table->string('slug')->nullable();
             $table->string('sku')->nullable();
+            $table->float('cost', 8, 2);
             $table->float('price', 8, 2);
             $table->float('discount', 8, 2)->nullable();
             $table->integer('inventory')->nullable();
             $table->boolean('available')->nullable();
-            $table->date('expire_date')->nullable();
+            $table->string('expire_date')->nullable();
             $table->string('image')->nullable();
             $table->mediumText('description')->nullable();
             $table->mediumText('additional_info')->nullable();
