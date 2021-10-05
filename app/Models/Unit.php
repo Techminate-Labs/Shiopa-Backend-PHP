@@ -9,5 +9,11 @@ class Unit extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $fillable = [
+        'name'
+    ];
+
+    public function item(){
+        return $this->hasMany(Item::class);
+    }
 }

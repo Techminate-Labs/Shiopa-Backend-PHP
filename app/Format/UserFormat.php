@@ -3,14 +3,23 @@
 namespace App\Format;
 
 class UserFormat{
+
+    public function isEmailVerified($data){
+        if($data == null){
+            return 'Not Verified Yet';
+        }else{
+            return $data->diffForHumans();
+        }
+    }
+
     public function formatList($user){
         return[
             'user_id' => $user->id,
-            'is_admin' => $user->is_admin,
+            'role_id' => $user->role_id,
             'role' => $user->role->name,
             'name' => $user->name,
             'email' => $user->email,
-            'email_verified_at' => $user->email_verified_at,
+            'email_verified_at' => $this->isEmailVerified($user->email_verified_at),
             'created_at'=>$user->created_at->diffForHumans(),
             'updated_at'=>$user->updated_at->diffForHumans()
         ];

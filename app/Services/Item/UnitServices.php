@@ -17,10 +17,10 @@ class UnitServices{
     }
 
     public function unitList($request){
-        if ($request->has('searchText')){
-            $unit = $this->ri->unitSearch($request->searchText);
+        if ($request->has('q')){
+            $unit = $this->ri->unitSearch($request->q, $request->limit);
         }else{
-            $unit = $this->ri->unitList();
+            $unit = $this->ri->unitList($request->limit);
         }
         return new PaginationResource($unit);
     }

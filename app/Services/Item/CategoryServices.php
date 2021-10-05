@@ -7,24 +7,34 @@ use Illuminate\Support\Str;
 //Interface
 use App\Contracts\Item\CategoryRepositoryInterface;
 
+//Utilities
+use App\Utilities\FileUtilities;
+
 //Resources
 use App\Http\Resources\PaginationResource;
 
 class CategoryServices{
     
     private $repositoryInterface;
+    private $fileUtilities;
+    public static $imagePath = 'images/category';
+    public static $explode_at = "category/";
 
-    public function __construct(CategoryRepositoryInterface $repositoryInterface){
+    public function __construct(
+        CategoryRepositoryInterface $repositoryInterface,
+        FileUtilities $fileUtilities){
         $this->ri = $repositoryInterface;
+        $this->fileUtilities = $fileUtilities;
     }
 
     public function categoryList($request){
-        if ($request->has('searchText')){
-            $category = $this->ri->categorySearch($request->searchText);
+        if ($request->has('q')){
+            $category = $this->ri->categorySearch($request->q, $request->limit);
         }else{
-            $category = $this->ri->categoryList();
+            $category = $this->ri->categoryList($request->limit);
         }
-        return new PaginationResource($category);
+        return $category;
+        // return new PaginationResource($category);
     }
 
     public function categoryGetById($id){
@@ -39,27 +49,30 @@ class CategoryServices{
     public function categoryCreate($request){
         $fields = $request->validate([
             'name'=>'required|string|unique:categories,name',
+            'parent_id'=>'required',
         ]);
 
+        //image upload
+        $categoryImage = $this->fileUtilities->fileUpload($request, url(''), self::$imagePath, false, false, false);
+
         $category = $this->ri->categoryCreate([
+            'parent_id' => $fields['parent_id'],
             'name' => $fields['name'],
-            'slug' => Str::slug($fields['name'])
+            'slug' => Str::slug($fields['name']),
+            'image' => $categoryImage
         ]);
 
         return response($category,201);
     }
 
     public function categoryUpdate($request, $id){
-        $fields = $request->validate([
-            
-        ]);
-
         $category = $this->ri->categoryGetById($id);
         if($category){
             $data = $request->all();
             if($category->name==$data['name']){
                 $fields = $request->validate([
                     'name'=>'required|string|max:255',
+                    'parent_id'=>'required',
                 ]);
             }
             else{
@@ -68,6 +81,10 @@ class CategoryServices{
                 ]);
             }
             $data['slug'] = Str::slug($fields['name']);
+            //image upload
+            $exImagePath = $category->image;
+            $categoryImage = $this->fileUtilities->fileUpload($request, url(''), self::$imagePath, self::$explode_at, $exImagePath, true);
+            $data['image'] = $categoryImage;
             $category->update($data);
             return response($category,201);
         }else{
