@@ -5,24 +5,24 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 
 //Interfaces
-use App\Contracts\User\UserRepositoryInterface;
-use App\Contracts\User\ProfileRepositoryInterface;
-use App\Contracts\User\RoleRepositoryInterface;
-use App\Contracts\Item\CategoryRepositoryInterface;
-use App\Contracts\Item\BrandRepositoryInterface;
-use App\Contracts\Item\UnitRepositoryInterface;
-use App\Contracts\Item\SupplierRepositoryInterface;
-use App\Contracts\Item\ItemRepositoryInterface;
+use App\Contracts\BaseRepositoryInterface;
+use App\Contracts\FilterRepositoryInterface;
+
+use App\Contracts\ItemRepositoryInterface;
+use App\Contracts\CartRepositoryInterface;
+
+use App\Contracts\ReportRepositoryInterface;
+use App\Contracts\DashboardRepositoryInterface;
 
 //Repositories
-use App\Repositories\User\UserRepository;
-use App\Repositories\User\ProfileRepository;
-use App\Repositories\User\RoleRepository;
-use App\Repositories\Item\CategoryRepository;
-use App\Repositories\Item\BrandRepository;
-use App\Repositories\Item\UnitRepository;
-use App\Repositories\Item\SupplierRepository;
-use App\Repositories\Item\ItemRepository;
+use App\Repositories\BaseRepository;
+use App\Repositories\FilterRepository;
+
+use App\Repositories\ItemRepository;
+use App\Repositories\CartRepository;
+
+use App\Repositories\ReportRepository;
+use App\Repositories\DashboardRepository;
 
 class RepositoriesServiceProvider extends ServiceProvider
 {
@@ -44,43 +44,33 @@ class RepositoriesServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->bind(
-            UserRepositoryInterface::class,
-            UserRepository::class,
+            BaseRepositoryInterface::class,
+            BaseRepository::class,
         );
 
         $this->app->bind(
-            ProfileRepositoryInterface::class,
-            ProfileRepository::class,
+            FilterRepositoryInterface::class,
+            FilterRepository::class,
         );
-
-        $this->app->bind(
-            RoleRepositoryInterface::class,
-            RoleRepository::class,
-        );
-
-        $this->app->bind(
-            CategoryRepositoryInterface::class,
-            CategoryRepository::class,
-        );
-
-        $this->app->bind(
-            BrandRepositoryInterface::class,
-            BrandRepository::class,
-        );
-
-        $this->app->bind(
-            UnitRepositoryInterface::class,
-            UnitRepository::class,
-        );
-
-        $this->app->bind(
-            SupplierRepositoryInterface::class,
-            SupplierRepository::class,
-        );
-
+        
         $this->app->bind(
             ItemRepositoryInterface::class,
             ItemRepository::class,
+        );
+
+        $this->app->bind(
+            CartRepositoryInterface::class,
+            CartRepository::class,
+        );
+
+        $this->app->bind(
+            ReportRepositoryInterface::class,
+            ReportRepository::class,
+        );
+
+        $this->app->bind(
+            DashboardRepositoryInterface::class,
+            DashboardRepository::class,
         );
 
         // $models = array(

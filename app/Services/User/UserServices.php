@@ -2,49 +2,52 @@
 
 namespace App\Services\User;
 
-//Interface
-use App\Contracts\User\UserRepositoryInterface;
+//Services
+use App\Services\BaseServices;
 
-//Resources
-use App\Http\Resources\PaginationResource;
+//Format
+use App\Format\UserFormat;
 
-class UserServices{
-    
-    private $repositoryInterface;
-
-    public function __construct(UserRepositoryInterface $repositoryInterface){
-        $this->ri = $repositoryInterface;
-    }
-
+class UserServices extends BaseServices{
     public function userList($request){
-        if ($request->has('searchText')){
-            $users = $this->ri->userSearch($request->searchText);
+        $this->logCreate($request);
+        if ($request->has('q')){
+            $users = $this->filterRI->filterBy2PropPaginated($this->userModel, $request->q, $request->limit, 'name', 'email');
         }else{
-            $users = $this->ri->userList();
+            $users = $this->baseRI->listWithPagination($this->userModel, $request->limit);
         }
-        return new PaginationResource($users);
-    }
-
-    public function userProfileView($id){
-        $user = $this->ri->userProfileView($id);
-        if($user){
-            return $user;
+        if($users){
+            return $users->through(function($user){
+                return UserFormat::formatList($user);
+            });
         }else{
-            return response(["failed"=>'User not found'],404);
+            return response(["message"=>'User not found'],404);
         }
     }
 
-    public function userGetById($id){
-        $user = $this->ri->userGetById($id);
+    public function userProfileView($request, $id){
+        $this->logCreate($request);
+        $user = $this->baseRI->findById($this->userModel, $id);
         if($user){
-            return $user;
+            return UserFormat::formatUserProfile($user);
         }else{
-            return response(["failed"=>'User not found'],404);
+            return response(["message"=>'User not found'],404);
+        }
+    }
+
+    public function userGetById($request, $id){
+        $this->logCreate($request);
+        $user = $this->baseRI->findById($this->userModel, $id);
+        if($user){
+            return UserFormat::formatList($user);
+        }else{
+            return response(["message"=>'User not found'],404);
         }
     }
 
     public function userUpdate($request, $id){
-        $user = $this->ri->userFindById($id);
+        $this->logCreate($request);
+        $user = $this->baseRI->findById($this->userModel, $id);
         if($user){
             $data = $request->all();
             if($user->email==$data['email']){
@@ -64,17 +67,18 @@ class UserServices{
             $user->update($data);
             return response($user,201);
         }else{
-            return response(["failed"=>'User not found'],404);
+            return response(["message"=>'User not found'],404);
         }
     }
 
-    public function userDelete($id){
-        $user = $this->ri->userFindById($id);
+    public function userDelete($request, $id){
+        $this->logCreate($request);
+        $user = $this->baseRI->findById($this->userModel, $id);
         if($user){
             $user->delete();
-            return response()->json('User Deleted Successfully',200);
+            return response()->json(["message"=>'Delete successfull !'],200);
         }else{
-            return response(["failed"=>'User not found'],404);
+            return response(["message"=>'User not found'],404);
         }
     }
 }
