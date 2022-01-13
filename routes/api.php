@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail']);
     Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+    
     // Users
     Route::get('/userList', [UserController::class, 'userList']);
     Route::get('/userGetById/{id}', [UserController::class, 'userGetById']);
@@ -52,9 +53,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/userProfileGetById/{id}', [ProfileController::class, 'userProfileGetById']);
     Route::put('/userProfileUpdate/{id}', [ProfileController::class, 'userProfileUpdate']);
     Route::delete('/userProfileDelete/{id}', [ProfileController::class, 'userProfileDelete']);
+    
     //Profile Settings
     Route::post('/profileSettingPhotoUpdate', [ProfileController::class, 'profileSettingPhotoUpdate']);
     Route::post('/profileSettingPasswordUpdate', [ProfileController::class,'profileSettingPasswordUpdate']);
+    
     //Roles
     Route::get('/roleList', [RoleController::class, 'roleList']);
     Route::get('/roleGetById/{id}', [RoleController::class, 'roleGetById']);

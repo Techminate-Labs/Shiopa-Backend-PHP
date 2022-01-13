@@ -11,36 +11,29 @@ use App\Services\Validation\Auth\AuthValidation;
 
 class AuthServices extends BaseServices{
 
-    private $userModel = User::class;
-
     public function registerCustomer($request){
         $fields = AuthValidation::registerCustomer($request);
-
         $user = $this->baseRI->storeInDB(
             $this->userModel,
             [
-                'role_id' => '0',
+                'role_id' => 0,
                 'is_admin' => 0,
                 'name' => $fields['name'],
                 'email' => $fields['email'],
                 'password' => bcrypt($fields['password'])
             ]
         );
-
         $token = $user->createToken('myapptoken')->plainTextToken;
-
         $response = [
             'user' => $user,
             'token' => $token
         ];
-
         return response($response, 201);
     }
 
     public function registerAdmin($request){
         if(auth()->user()->is_admin == true){
             $fields = AuthValidation::registerAdmin($request);
-    
             $user = $this->baseRI->storeInDB(
                 $this->userModel,
                 [
@@ -51,20 +44,16 @@ class AuthServices extends BaseServices{
                     'password' => bcrypt($fields['password'])
                 ]
             );
-    
             $token = $user->createToken('myapptoken')->plainTextToken;
-    
             $response = [
                 'user' => $user,
                 'token' => $token
             ];
-    
             return response($response, 201);
         }else{
             $response = [
                 'user' => 'You are not Authorized',
             ];
-    
             return response($response, 401);
         }
     }
@@ -72,7 +61,7 @@ class AuthServices extends BaseServices{
     public function loginCustomer($request) {
         $fields = AuthValidation::login($request);
         // Check email
-        $user = $this->baseRI->userGetByEmail($fields['email']);
+        $user = $this->filterRI->filterBy1PropFirst($this->userModel, $fields['email'], 'email');
         // Check password
         if(!$user || !Hash::check($fields['password'], $user->password)) {
             return response([
@@ -90,7 +79,7 @@ class AuthServices extends BaseServices{
     public function loginAdmin($request) {
         $fields = AuthValidation::login($request);
         // Check email
-        $user = $this->baseRI->userGetByEmail($fields['email']);
+        $user = $this->filterRI->filterBy1PropFirst($this->userModel, $fields['email'], 'email');
         if($user->is_admin == true){
             if(!$user || !Hash::check($fields['password'], $user->password)) {
                 return response([
@@ -102,7 +91,6 @@ class AuthServices extends BaseServices{
                 'user' => $user,
                 'token' => $token,
             ];
-    
             return response($response, 200);
         }else{
             $response = [
@@ -113,8 +101,7 @@ class AuthServices extends BaseServices{
     }
 
     public function logout(){
-        $this->baseRI->userAuthenticated()->tokens()->delete();
-
+        auth()->user()->tokens()->delete();
         return [
             'message' => 'Logged out'
         ];
