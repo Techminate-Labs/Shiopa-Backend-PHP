@@ -1,80 +1,91 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Services\Item;
+
+use Illuminate\Support\Str;
 
 //Services
 use App\Services\BaseServices;
-
-//Format
+use App\Services\Validation\Item\CategoryValidation;
 
 //Models
 use App\Models\Category;
 
-class CategoryServices extends BaseServices{
+//Utilities
+use App\Utilities\FileUtilities;
 
-    private $categoryModel = Category::class;
+class CategoryServices extends BaseServices{
+    public static $imagePath = 'images/category';
+    public static $explode_at = "category/";
+
+    private  $categoryModel = Category::class;
 
     public function categoryList($request){
-        $this->logCreate($request);
+        $countObj = 'item';
+        $prop1 = 'name';
         if ($request->has('q')){
-            $categories = $this->filterRI->filterBy1PropPaginated($this->categoryModel, $request->q, $request->limit, 'name');
+            $category = $this->filterRI->filterBy1PropWithCount($this->categoryModel, $request->q, $request->limit, $countObj, $prop1);
         }else{
-            $categories = $this->baseRI->listWithPagination($this->categoryModel, $request->limit);
+            $category = $this->baseRI->listwithCount($this->categoryModel, $request->limit, $countObj);
         }
-        if($categories){
-            return $categories;
-        }else{
-            return response(["message"=>'category not found'],404);
-        }
+        return $category;
     }
 
-    public function categoryGetById($request, $id){
-        $this->logCreate($request);
+    public function categoryGetById($id){
         $category = $this->baseRI->findById($this->categoryModel, $id);
         if($category){
             return $category;
         }else{
-            return response(["message"=>'category not found'],404);
+            return response(["failed"=>'category not found'],404);
         }
     }
 
     public function categoryCreate($request){
-        $this->logCreate($request);
-        $request->validate([
-            'name'=>'required',
-            'permissions'=>'required'
-        ]);
-        $data = $request->all();
+        $fields = CategoryValidation::validate1($request);
+        $image = FileUtilities::fileUpload($request, url(''), self::$imagePath, false, false, false);
 
-        $category = $this->baseRI->storeInDB($this->categoryModel, $data);
-        return response($category,201);
+        $category = $this->baseRI->storeInDB(
+            $this->categoryModel,
+            [
+                'parent_id' => $fields['parent_id'],
+                'name' => $fields['name'],
+                'slug' => Str::slug($fields['name']),
+                'image' => $image,
+            ]
+        );
+
+        if($category){
+            return response($category,201);
+        }else{
+            return response(["failed"=>'Server Error'],500);
+        }
     }
 
     public function categoryUpdate($request, $id){
-        $this->logCreate($request);
-        $request->validate([
-            'name'=>'required',
-            'permissions'=>'required'
-        ]);
         $category = $this->baseRI->findById($this->categoryModel, $id);
         if($category){
             $data = $request->all();
+            if($category->name==$data['name']){
+                $fields = CategoryValidation::validate2($request);
+            }
+            else{
+                $fields = CategoryValidation::validate1($request);
+            }
+            $data['slug'] = Str::slug($fields['name']);
             $category->update($data);
             return response($category,201);
         }else{
-            return response(["message"=>'category not found'],404);
+            return response(["failed"=>'Category not found'],404);
         }
     }
 
-    public function categoryDelete($request, $id){
-        $this->logCreate($request);
+    public function categoryDelete($id){
         $category = $this->baseRI->findById($this->categoryModel, $id);
         if($category){
             $category->delete();
-            return response(["message"=>'Delete Successfull'],200);
+            return response(["done"=>'category Deleted Successfully'],200);
         }else{
-            return response(["message"=>'category not found'],404);
+            return response(["failed"=>'category not found'],404);
         }
     }
-
 }
