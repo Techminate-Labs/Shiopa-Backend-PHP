@@ -27,18 +27,18 @@ class BaseRepository implements BaseRepositoryInterface{
     }
 
     public function listWithoutPagination($model, $limit){
-        return $model::orderBy('created_at', 'desc')
+        return $model::orderBy('id', 'desc')
                 ->all();
     }
 
     public function listWithPagination($model, $limit){
-        return $model::orderBy('created_at', 'desc')
+        return $model::orderBy('id', 'desc')
                 ->paginate($limit);
     }
 
     public function listwithCount($model, $limit, $countObj){
         return $model::withCount($countObj)
-                ->orderBy('created_at', 'desc')
+                ->orderBy('id', 'desc')
                 ->paginate($limit);
     }
 

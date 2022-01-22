@@ -16,8 +16,17 @@ class CategorySeeder extends Seeder
     {
         DB::table('categories')->insert([
             'parent_id' => '0',
-            'name' => 'Pizza',
-            'slug' => 'pizza',
+            'name' => 'Instrument',
+            'slug' => 'instrument',
+            'image' => 'http://127.0.0.1:8000/images/category/default.jpg',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('categories')->insert([
+            'parent_id' => '0',
+            'name' => 'Device',
+            'slug' => 'device',
             'image' => 'http://127.0.0.1:8000/images/category/default.jpg',
             'created_at' => now(),
             'updated_at' => now()
@@ -25,8 +34,8 @@ class CategorySeeder extends Seeder
 
         DB::table('categories')->insert([
             'parent_id' => '1',
-            'name' => 'Burger',
-            'slug' => 'burger',
+            'name' => 'guitar',
+            'slug' => 'guitar',
             'image' => 'http://127.0.0.1:8000/images/category/default.jpg',
             'created_at' => now(),
             'updated_at' => now()
@@ -34,8 +43,17 @@ class CategorySeeder extends Seeder
 
         DB::table('categories')->insert([
             'parent_id' => '1',
-            'name' => 'Sandwitch',
-            'slug' => 'sandwitch',
+            'name' => 'Bass',
+            'slug' => 'bass',
+            'image' => 'http://127.0.0.1:8000/images/category/default.jpg',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('categories')->insert([
+            'parent_id' => '1',
+            'name' => 'Piano',
+            'slug' => 'piano',
             'image' => 'http://127.0.0.1:8000/images/category/default.jpg',
             'created_at' => now(),
             'updated_at' => now()
@@ -43,8 +61,8 @@ class CategorySeeder extends Seeder
 
         DB::table('categories')->insert([
             'parent_id' => '2',
-            'name' => 'Fried Chicken',
-            'slug' => 'friedchicken',
+            'name' => 'Mobile',
+            'slug' => 'mobile',
             'image' => 'http://127.0.0.1:8000/images/category/default.jpg',
             'created_at' => now(),
             'updated_at' => now()
@@ -52,17 +70,8 @@ class CategorySeeder extends Seeder
 
         DB::table('categories')->insert([
             'parent_id' => '2',
-            'name' => 'Fired Rice',
-            'slug' => 'friedrice',
-            'image' => 'http://127.0.0.1:8000/images/category/default.jpg',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        DB::table('categories')->insert([
-            'parent_id' => '3',
-            'name' => 'Biriani',
-            'slug' => 'biriani',
+            'name' => 'Laptop',
+            'slug' => 'laptop',
             'image' => 'http://127.0.0.1:8000/images/category/default.jpg',
             'created_at' => now(),
             'updated_at' => now()

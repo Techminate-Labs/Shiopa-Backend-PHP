@@ -34,26 +34,36 @@ class CategoryServices extends BaseServices{
     public function categoryGetById($id){
         $category = $this->baseRI->findById($this->categoryModel, $id);
         if($category){
-            return $category;
+            $subCategories = $this->baseRI->findByIdGet($this->categoryModel, $id, 'parent_id');
+            $data = [
+                'category' => $category,
+                'subcategories' => $subCategories,
+            ];
+            return response($data,201);
         }else{
             return response(["failed"=>'category not found'],404);
         }
     }
 
     public function categoryCreate($request){
-        $fields = CategoryValidation::validate1($request);
+        if($request->parent_id == null){
+            $fields = CategoryValidation::validate1($request);
+            $parent_id = 0;
+        }
+        else{
+            $fields = CategoryValidation::validate2($request);
+            $parent_id = $fields['parent_id'];
+        }
         $image = FileUtilities::fileUpload($request, url(''), self::$imagePath, false, false, false);
-
         $category = $this->baseRI->storeInDB(
             $this->categoryModel,
             [
-                'parent_id' => $fields['parent_id'],
+                'parent_id' => $parent_id,
                 'name' => $fields['name'],
                 'slug' => Str::slug($fields['name']),
                 'image' => $image,
             ]
         );
-
         if($category){
             return response($category,201);
         }else{
@@ -64,15 +74,40 @@ class CategoryServices extends BaseServices{
     public function categoryUpdate($request, $id){
         $category = $this->baseRI->findById($this->categoryModel, $id);
         if($category){
-            $data = $request->all();
-            if($category->name==$data['name']){
-                $fields = CategoryValidation::validate2($request);
+            if($request->parent_id == null){
+                $parent_id = 0;
+                if($category->name==$request->name){
+                    $fields = CategoryValidation::validate3($request);
+                }
+                else{
+                    $fields = CategoryValidation::validate1($request);
+                }
             }
             else{
-                $fields = CategoryValidation::validate1($request);
+                if($category->name==$request->name){
+                    $fields = CategoryValidation::validate4($request);
+                    $parent_id = $fields['parent_id'];
+                }
+                else{
+                    $fields = CategoryValidation::validate2($request);
+                }
             }
-            $data['slug'] = Str::slug($fields['name']);
-            $category->update($data);
+            $exImagePath = $category->image;
+            $image = FileUtilities::fileUpload($request, url(''), self::$imagePath, self::$explode_at, $exImagePath, true);
+            return [
+                'parent_id' => $parent_id,
+                'name' => $fields['name'],
+                'slug' => Str::slug($fields['name']),
+                'image' => $image,
+            ];
+            $category->update(
+                [
+                    'parent_id' => $parent_id,
+                    'name' => $fields['name'],
+                    'slug' => Str::slug($fields['name']),
+                    'image' => $image,
+                ]
+            );
             return response($category,201);
         }else{
             return response(["failed"=>'Category not found'],404);
