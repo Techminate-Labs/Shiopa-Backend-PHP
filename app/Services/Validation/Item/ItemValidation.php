@@ -9,7 +9,9 @@ class ItemValidation{
             'brand_id'=>'required|numeric',
             'unit_id'=>'required|numeric',
             'supplier_id'=>'required|numeric',
+            'section_id'=>'required|numeric',
             'name'=>'required|string|unique:categories,name',
+            'cost'=>'required|numeric',
             'price'=>'required|numeric',
             'inventory'=>'required|numeric',
         ]);
