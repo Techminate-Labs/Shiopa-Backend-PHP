@@ -70,6 +70,7 @@ class ItemServices extends BaseServices{
 
         if($item){
             return $item->through(function($item){
+                return $item;
                 return ItemFormat::formatItemList($item);
                });
         }else{
@@ -80,7 +81,8 @@ class ItemServices extends BaseServices{
     public function itemGetById($id){
         $item = $this->baseRI->findById($this->itemModel, $id);
         if($item){
-            return ItemFormat::formatItemList($item);
+            return $item;
+            // return ItemFormat::formatItemList($item);
         }else{
             return response(["failed"=>'item not found'],404);
         }
@@ -88,11 +90,7 @@ class ItemServices extends BaseServices{
 
     public function itemCreate($request){
         $fields = ItemValidation::validate1($request);
-        //image upload
         $image = FileUtilities::fileUpload($request, url(''), self::$imagePath, false, false, false);
-        $data = $request->all();
-        $data['image'] = $image;
-
         $item = $this->baseRI->storeInDB(
             $this->itemModel,
             [
@@ -100,50 +98,51 @@ class ItemServices extends BaseServices{
                 'brand_id' => $fields['brand_id'],
                 'unit_id' => $fields['unit_id'],
                 'supplier_id' => $fields['supplier_id'],
+                'section_id' => $fields['section_id'],
                 'name' => $fields['name'],
                 'slug' => Str::slug($fields['name']),
-                'sku' => rand(1111,100000),
+                'sku' => date('md').date('is').mt_rand(10,100),
+                'cost' => $fields['cost'],
                 'price' => $fields['price'],
-                'discount' => $data['discount'],
+                'discount' => $request->discount,
                 'inventory' => $fields['inventory'],
-                'expire_date' => $data['expire_date'],
-                'available' => $data['available'],
-                'image' => $data['image']
+                'available' => $request->available,
+                'expire_date' => $request->expire_date,
+                'image' => $image,
+                'description' => $request->description,
+                'additional_info' => $request->additional_info
             ]);
-
         if($item){
-            return ItemFormat::formatItemList($item);
+            return response($item,201);
         }else{
             return [] ;
         }
-
-        return response($item,201);
     }
 
     public function itemUpdate($request, $id){
         $item = $this->baseRI->findById($this->itemModel, $id);
-
         if($item){
             $fields = ItemValidation::validate1($request);
-            $data = $request->all();
-            //image upload
             $exImagePath = $item->image;
             $image = FileUtilities::fileUpload($request, url(''), self::$imagePath, self::$explode_at, $exImagePath, true);
-            $data['image'] = $image;
-
             $item->update([
                 'category_id' => $fields['category_id'],
                 'brand_id' => $fields['brand_id'],
                 'unit_id' => $fields['unit_id'],
                 'supplier_id' => $fields['supplier_id'],
+                'section_id' => $fields['section_id'],
                 'name' => $fields['name'],
                 'slug' => Str::slug($fields['name']),
+                'sku' => date('md').date('is').mt_rand(10,100),
+                'cost' => $fields['cost'],
                 'price' => $fields['price'],
-                'discount' => $data['discount'],
+                'discount' => $request->discount,
                 'inventory' => $fields['inventory'],
-                'expire_date' => $data['expire_date'],
-                'available' => $data['available'],
-                'image' => $data['image']
+                'available' => $request->available,
+                'expire_date' => $request->expire_date,
+                'image' => $image,
+                'description' => $request->description,
+                'additional_info' => $request->additional_info
             ]);
             return response($item,201);
         }else{
