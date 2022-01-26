@@ -23,6 +23,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Unit;
 use App\Models\Supplier;
+use App\Models\Section;
 
 class ItemServices extends BaseServices{
     public static $imagePath = 'images/item';
@@ -157,5 +158,23 @@ class ItemServices extends BaseServices{
         }else{
             return response(["failed"=>'item not found'],404);
         }
+    }
+
+    public function itemListHomePage(){
+        $sections = Section::latest()->get();
+        $homepageItems = [];
+        foreach($sections as $section){
+            $items = Item::where('section_id',$section->id)->limit(8)->get();
+            $data = [
+                'section'=>$section,
+                'items'=>$items
+            ];
+            array_push($homepageItems, $data);
+        }
+        return response(["data"=>$homepageItems],200);
+    }
+
+    public function itemListShopPage(){
+        return Item::all();
     }
 }

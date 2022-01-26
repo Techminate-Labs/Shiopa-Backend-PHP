@@ -40,4 +40,12 @@ class ItemController extends Controller
     {
         return $this->services->itemDelete($id);
     }
+
+    public function itemListHomePage(){
+        return $this->services->itemListHomePage();
+    }
+
+    public function itemListShopPage(Request $request){
+        return $this->services->itemListShopPage($request);
+    }
 }
