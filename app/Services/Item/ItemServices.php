@@ -70,9 +70,8 @@ class ItemServices extends BaseServices{
 
         if($item){
             return $item->through(function($item){
-                return $item;
                 return ItemFormat::formatItemList($item);
-               });
+            });
         }else{
             return response(["failed"=>'item not found'],404);
         }
@@ -81,8 +80,8 @@ class ItemServices extends BaseServices{
     public function itemGetById($id){
         $item = $this->baseRI->findById($this->itemModel, $id);
         if($item){
-            return $item;
-            // return ItemFormat::formatItemList($item);
+            // return $item;
+            return ItemFormat::formatItemList($item);
         }else{
             return response(["failed"=>'item not found'],404);
         }

@@ -27,5 +27,7 @@ class Item extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-
+    public function section(){
+        return $this->belongsTo(Section::class);
+    }
 }
