@@ -100,5 +100,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/itemUpdate/{id}', [ItemController::class, 'itemUpdate']);
     Route::delete('/itemDelete/{id}', [ItemController::class, 'itemDelete']);
 
-    
+    Route::get('/itemListHomePage', [ItemController::class, 'itemListHomePage']);
+    Route::get('/itemListShopPage', [ItemController::class, 'itemListShopPage']);
 });
