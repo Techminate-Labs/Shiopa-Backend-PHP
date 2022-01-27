@@ -45,10 +45,10 @@ class ItemController extends Controller
     }
 
     public function itemListHomePage(){
-        return $this->services->itemListHomePage();
+        return $this->productServices->itemListHomePage();
     }
 
     public function itemListShopPage(Request $request){
-        return $this->services->itemListShopPage($request);
+        return $this->productServices->itemListShopPage($request);
     }
 }
