@@ -7,13 +7,16 @@ use Illuminate\Http\Request;
 
 //Service
 use App\Services\Item\ItemServices;
+use App\Services\Item\ProductServices;
 
 class ItemController extends Controller
 {
     private $itemServices;
+    private $productServices;
 
-    public function __construct(ItemServices $itemServices){
+    public function __construct(ItemServices $itemServices, ProductServices $productServices){
         $this->services = $itemServices;
+        $this->productServices = $productServices;
     }
 
     public function itemList(Request $request)
