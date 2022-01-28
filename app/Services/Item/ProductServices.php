@@ -47,10 +47,22 @@ class ItemServices extends BaseServices{
     public function itemListShopPage(){
 
         //filter by category
+        if($request->has('category_id')){
+            $item = Item::where('category_id',$category_id)->get();
+        }
         //filter by price
+        if($request->has('price')){
+            $item = Item::where('price',$price)->get();
+        }
         //filter by brand
+        if($request->has('brand_id')){
+            $item = Item::where('brand_id',$brand_id)->get();
+        }
         //filter by alphabet
+        if($request->has('q')){
+            $item = Item::where('name',$q)->get();
+        }
 
-        return Item::all();
+        return $item;
     }
 }
