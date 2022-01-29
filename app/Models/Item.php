@@ -30,4 +30,8 @@ class Item extends Model
     public function section(){
         return $this->belongsTo(Section::class);
     }
+
+    public function item(){
+        return $this->belongsTo(OrderItem::class);
+    }
 }
