@@ -21,6 +21,8 @@ use App\Http\Controllers\Item\UnitController;
 use App\Http\Controllers\Item\SupplierController;
 use App\Http\Controllers\Item\ItemController;
 
+use App\Http\Controllers\Item\OrderController;
+
 Route::middleware('auth:sanctum','verified')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -102,4 +104,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/itemListHomePage', [ItemController::class, 'itemListHomePage']);
     Route::get('/itemListShopPage', [ItemController::class, 'itemListShopPage']);
+
+    Route::post('/checkStock', [OrderController::class, 'checkStock']);
 });
