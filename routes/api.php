@@ -105,5 +105,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/itemListHomePage', [ItemController::class, 'itemListHomePage']);
     Route::get('/itemListShopPage', [ItemController::class, 'itemListShopPage']);
 
-    Route::post('/checkStock', [OrderController::class, 'checkStock']);
+    Route::post('/orderCreate', [OrderController::class, 'orderCreate']);
 });
