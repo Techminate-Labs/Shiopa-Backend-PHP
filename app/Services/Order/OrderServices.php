@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Item;
+namespace App\Services\Order;
 
 use Illuminate\Support\Str;
 
@@ -24,28 +24,30 @@ class OrderServices extends BaseServices{
     public function checkStock($orderItems){
         $stockOutItems = [];
         foreach($orderItems as $cartItem){
-            $item = Item::find($cartItem->id)->first();
+            $item = Item::where('id', $cartItem->item_id)->first();
             if($item->inventory >= $cartItem->qty) {
                 continue;
             }else{
-                //add item id and send as respose with a message Item has been sold
                 $data = [
                     'item_id'=>$item->id,
-                    'item'=>$items->name
+                    'item'=>$item->name
                 ];
                 array_push($stockOutItems, $data);
             }
         }
-        return response(["data"=>$stockOutItems],200);
+        return $stockOutItems;
     }
 
     public function orderCreate($request){
-        $orderItems = $request->items;
-        $stockOutItems = checkStock($orderItems);
-        if(count($stockOutItems) > 0){
-            //return stock out items
-            return $stockOutItems;
+        $orderItems = json_decode($request->order_items);
+        $stockOutItems = $this->checkStock($orderItems);
+        if(count((array)$stockOutItems) > 0){
+            return response([
+                "message"=>"item stock out",
+                "stock_out_items" => $stockOutItems
+            ],200);
         }else{
+            // return response(["message"=>"order created successfully"],201);
             $order = $this->baseRI->storeInDB(
                 $this->orderModel,
                 [
@@ -64,7 +66,7 @@ class OrderServices extends BaseServices{
             if($order){
                 $success = $this->orderItems($orderItems, $order->id);
                 if($success){
-                    return response(["message"=>"order created successfully"],200);
+                    return response(["message"=>"order created successfully"],201);
                 }else{
                     return response(["message"=>"something went wrong, try again"],200);
                 }
@@ -80,7 +82,7 @@ class OrderServices extends BaseServices{
                 $this->orderItemModel,
                 [
                     'order_id' => $orderId,
-                    'product_id' => $orderItem->id,
+                    'item_id' => $orderItem->item_id,
                 ]
             );
         }

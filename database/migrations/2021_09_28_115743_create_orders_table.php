@@ -24,7 +24,7 @@ class CreateOrdersTable extends Migration
             $table->float('payment');
             $table->text('note');
             $table->string('status');
-            $table->date('delivery_date');
+            $table->string('delivery_date');
             $table->timestamps();
         });
     }
