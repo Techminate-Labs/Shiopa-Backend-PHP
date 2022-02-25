@@ -7,16 +7,13 @@ use Illuminate\Http\Request;
 
 //Service
 use App\Services\Item\ItemServices;
-use App\Services\Item\ProductServices;
 
 class ItemController extends Controller
 {
     private $itemServices;
-    private $productServices;
 
-    public function __construct(ItemServices $itemServices, ProductServices $productServices){
+    public function __construct(ItemServices $itemServices){
         $this->services = $itemServices;
-        $this->productServices = $productServices;
     }
 
     public function itemList(Request $request)
@@ -42,13 +39,5 @@ class ItemController extends Controller
     public function itemDelete($id)
     {
         return $this->services->itemDelete($id);
-    }
-
-    public function itemListHomePage(){
-        return $this->productServices->itemListHomePage();
-    }
-
-    public function itemListShopPage(Request $request){
-        return $this->productServices->itemListShopPage($request);
     }
 }
