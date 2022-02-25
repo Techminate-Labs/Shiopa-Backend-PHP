@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'role_id' => '2',
+            'role_id' => '1',
             'is_admin' => '1',
             'name' => 'Sazid',
             'email' => 'sazidahmed.official@gmail.com',
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'role_id' => '0',
+            'role_id' => '2',
             'is_admin' => '0',
             'name' => 'Customer',
             'email' => 'customer@gmail.com',
@@ -46,7 +46,6 @@ class UserSeeder extends Seeder
             'password' => Hash::make('123456'),
             'created_at' => now(),
             'updated_at' => now()
-            
         ]);
 
     }

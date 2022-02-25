@@ -22,7 +22,7 @@ class UserServices extends BaseServices{
             });
         }else{
             return response(["message"=>'User not found'],404);
-        }
+        }   
     }
 
     public function userProfileView($request, $id){

@@ -17,6 +17,7 @@ class UserFormat{
             'user_id' => $user->id,
             'role_id' => $user->role_id,
             'role' => $user->role->name,
+            'is_admin' => $user->is_admin,
             'name' => $user->name,
             'email' => $user->email,
             'email_verified_at' => self::isEmailVerified($user->email_verified_at),
