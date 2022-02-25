@@ -16,8 +16,8 @@ class OrderController extends Controller
         $this->orderServices = $orderServices;
     }
 
-    public function checkStock(Request $request)
+    public function orderCreate(Request $request)
     {
-        return $this->services->checkStock($request);
+        return $this->orderServices->orderCreate($request);
     }
 }

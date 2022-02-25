@@ -22,7 +22,7 @@ use App\Http\Controllers\Item\SupplierController;
 use App\Http\Controllers\Item\ItemController;
 use App\Http\Controllers\Item\HomeItemController;
 
-use App\Http\Controllers\Item\OrderController;
+use App\Http\Controllers\Order\OrderController;
 
 use App\Http\Controllers\System\ConfigurationController;
 use App\Http\Controllers\System\ActivityLogController;
