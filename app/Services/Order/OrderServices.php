@@ -23,9 +23,9 @@ class OrderServices extends BaseServices{
 
     public function checkStock($orderItems){
         $stockOutItems = [];
-        foreach($orderItems as $cartItem){
-            $item = Item::where('id', $cartItem->item_id)->first();
-            if($item->inventory >= $cartItem->qty) {
+        foreach($orderItems as $orderItem){
+            $item = Item::where('id', $orderItem->item_id)->first();
+            if($item->inventory >= $orderItem->qty) {
                 continue;
             }else{
                 $data = [
@@ -47,7 +47,6 @@ class OrderServices extends BaseServices{
                 "stock_out_items" => $stockOutItems
             ],200);
         }else{
-            // return response(["message"=>"order created successfully"],201);
             $order = $this->baseRI->storeInDB(
                 $this->orderModel,
                 [
@@ -85,7 +84,14 @@ class OrderServices extends BaseServices{
                     'item_id' => $orderItem->item_id,
                 ]
             );
+            $this->updateStock($orderItem->item_id, $orderItem->qty);
         }
         return true;
+    }
+
+    public function updateStock($itemId, $qty){
+        $item = Item::where('id', $itemId)->first();
+        $item->inventory = $item->inventory - $qty;
+        $item->save();
     }
 }
