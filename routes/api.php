@@ -20,8 +20,12 @@ use App\Http\Controllers\Item\BrandController;
 use App\Http\Controllers\Item\UnitController;
 use App\Http\Controllers\Item\SupplierController;
 use App\Http\Controllers\Item\ItemController;
+use App\Http\Controllers\Item\HomeItemController;
 
 use App\Http\Controllers\Item\OrderController;
+
+use App\Http\Controllers\System\ConfigurationController;
+use App\Http\Controllers\System\ActivityLogController;
 
 Route::middleware('auth:sanctum','verified')->get('/user', function (Request $request) {
     return $request->user();
@@ -102,8 +106,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/itemUpdate/{id}', [ItemController::class, 'itemUpdate']);
     Route::delete('/itemDelete/{id}', [ItemController::class, 'itemDelete']);
 
-    Route::get('/itemListHomePage', [ItemController::class, 'itemListHomePage']);
-    Route::get('/itemListShopPage', [ItemController::class, 'itemListShopPage']);
+    ////Home Item
+    Route::get('/itemListHomePage', [HomeItemController::class, 'itemListHomePage']);
+    Route::get('/itemListShopPage', [HomeItemController::class, 'itemListShopPage']);
 
     Route::post('/orderCreate', [OrderController::class, 'orderCreate']);
+
+
+    //Configuration
+    Route::get('/config', [ConfigurationController::class, 'config']);
+    Route::put('/configUpdate', [ConfigurationController::class, 'configUpdate']);
+    Route::get('/logList', [ActivityLogController::class, 'logList']);
 });

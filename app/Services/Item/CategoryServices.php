@@ -20,7 +20,7 @@ class CategoryServices extends BaseServices{
 
     private  $categoryModel = Category::class;
 
-    public function categoryLaist($request){
+    public function categoryList($request){
         $countObj = 'item';
         $prop1 = 'name';
         if ($request->has('q')){
