@@ -16,7 +16,7 @@ class AuthServices extends BaseServices{
         $user = $this->baseRI->storeInDB(
             $this->userModel,
             [
-                'role_id' => 0,
+                'role_id' => 2,
                 'is_admin' => 0,
                 'name' => $fields['name'],
                 'email' => $fields['email'],

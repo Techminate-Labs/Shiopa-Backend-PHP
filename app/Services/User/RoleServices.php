@@ -15,7 +15,6 @@ class RoleServices extends BaseServices{
     private $roleModel = Role::class;
 
     public function roleList($request){
-        $this->logCreate($request);
         if ($request->has('q')){
             $roles = $this->filterRI->filterBy1PropPaginated($this->roleModel, $request->q, $request->limit, 'name');
         }else{
@@ -30,8 +29,7 @@ class RoleServices extends BaseServices{
         }
     }
 
-    public function roleGetById($request, $id){
-        $this->logCreate($request);
+    public function roleGetById($id){
         $role = $this->baseRI->findById($this->roleModel, $id);
         if($role){
             return $role;
@@ -41,7 +39,6 @@ class RoleServices extends BaseServices{
     }
 
     public function roleCreate($request){
-        $this->logCreate($request);
         $request->validate([
             'name'=>'required',
             'permissions'=>'required'
@@ -53,7 +50,6 @@ class RoleServices extends BaseServices{
     }
 
     public function roleUpdate($request, $id){
-        $this->logCreate($request);
         $request->validate([
             'name'=>'required',
             'permissions'=>'required'
@@ -68,8 +64,7 @@ class RoleServices extends BaseServices{
         }
     }
 
-    public function roleDelete($request, $id){
-        $this->logCreate($request);
+    public function roleDelete($id){
         $role = $this->baseRI->findById($this->roleModel, $id);
         if($role){
             $role->delete();
