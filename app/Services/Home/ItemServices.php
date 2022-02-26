@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Item;
+namespace App\Services\Home;
 
 //Repository
 use App\Repositories\ItemRepository;
@@ -14,7 +14,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Section;
 
-class HomeItemServices extends BaseServices{
+class ItemServices extends BaseServices{
 
     private $itemModel = Item::class;
     private $categoryModel = Category::class;
