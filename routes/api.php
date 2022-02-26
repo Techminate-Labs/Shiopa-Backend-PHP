@@ -20,7 +20,9 @@ use App\Http\Controllers\Item\BrandController;
 use App\Http\Controllers\Item\UnitController;
 use App\Http\Controllers\Item\SupplierController;
 use App\Http\Controllers\Item\ItemController;
-use App\Http\Controllers\Item\HomeItemController;
+
+use App\Http\Controllers\Home\HomeItemController;
+use App\Http\Controllers\Home\HomeImageController;
 
 use App\Http\Controllers\Order\OrderController;
 
