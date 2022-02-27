@@ -21,7 +21,7 @@ class OrderServices extends BaseServices{
     private $orderItemModel = OrderItem::class;
     private $itemModel = Item::class;
 
-    public function checkStock($orderItems){
+    public function checkStockOfOrderItem($orderItems){
         $stockOutItems = [];
         foreach($orderItems as $orderItem){
             $item = Item::where('id', $orderItem->item_id)->first();
@@ -38,9 +38,29 @@ class OrderServices extends BaseServices{
         return $stockOutItems;
     }
 
+    public function updateStockOfOrderItem($itemId, $qty){
+        $item = Item::where('id', $itemId)->first();
+        $item->inventory = $item->inventory - $qty;
+        $item->save();
+    }
+
+    public function storeOrderItems($orderItems, $orderId){
+        foreach($orderItems as $orderItem){
+            $this->baseRI->storeInDB(
+                $this->orderItemModel,
+                [
+                    'order_id' => $orderId,
+                    'item_id' => $orderItem->item_id,
+                ]
+            );
+            $this->updateStockOfOrderItem($orderItem->item_id, $orderItem->qty);
+        }
+        return true;
+    }
+
     public function orderCreate($request){
         $orderItems = json_decode($request->order_items);
-        $stockOutItems = $this->checkStock($orderItems);
+        $stockOutItems = $this->checkStockOfOrderItem($orderItems);
         if(count((array)$stockOutItems) > 0){
             return response([
                 "message"=>"item stock out",
@@ -63,7 +83,7 @@ class OrderServices extends BaseServices{
                 ]
             );
             if($order){
-                $success = $this->orderItems($orderItems, $order->id);
+                $success = $this->storeOrderItems($orderItems, $order->id);
                 if($success){
                     return response(["message"=>"order created successfully"],201);
                 }else{
@@ -75,23 +95,38 @@ class OrderServices extends BaseServices{
         }
     }
 
-    public function orderItems($orderItems, $orderId){
-        foreach($orderItems as $orderItem){
-            $this->baseRI->storeInDB(
-                $this->orderItemModel,
-                [
-                    'order_id' => $orderId,
-                    'item_id' => $orderItem->item_id,
-                ]
-            );
-            $this->updateStock($orderItem->item_id, $orderItem->qty);
-        }
-        return true;
+    public function orderItemList($id){
+        //all order item list
+        $orderItems = OrderItem::where('order_id', $id)->get();
+        return $orderItems;
+        
     }
 
-    public function updateStock($itemId, $qty){
-        $item = Item::where('id', $itemId)->first();
-        $item->inventory = $item->inventory - $qty;
-        $item->save();
+    public function orderList($request, $limit){
+        //all order list
+        $orders = Order::all();
+        return $orders;
+        
+    }
+
+    public function orderListInCustomerPortal(){
+        //authorised customer's order list
+        $orders = Order::where('user_id', auth()->user()->id)->get();
+        return $orders;
+    }
+
+    public function orderStatusUpdate($request, $id){
+        //update the order status
+        $order = Order::where('id', $id)->first();
+        $order->status = $request->order_status;
+        $order->save();
+        return response(["message"=>"order status updated successfully"],200);
+    }
+
+    public function orderCancelHandler($request, $id){
+        // take order number and restore the items of that order
+        $order = Order::where('id', $id)->first();
+        // find item and update stock
+        return response(["message"=>"Cancelled order items restored successfully"],200);
     }
 }
