@@ -19,7 +19,7 @@ class CreateItemsTable extends Migration
             $table->unsignedBigInteger('brand_id');
             $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('supplier_id');
-            $table->unsignedBigInteger('section_id');
+            $table->string('section');
             $table->string('name');
             $table->string('slug')->nullable();
             $table->string('sku')->nullable();

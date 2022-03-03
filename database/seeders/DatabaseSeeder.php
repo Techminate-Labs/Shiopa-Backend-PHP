@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             UnitSeeder::class,
             ItemSeeder::class,
             SupplierSeeder::class,
-            ConfigSeeder::class
+            ConfigSeeder::class,
+            HomeImageSeeder::class
         ]);
     }
 }

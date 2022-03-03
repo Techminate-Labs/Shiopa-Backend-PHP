@@ -16,8 +16,20 @@ class HomeItemController extends Controller
         $this->itemServices = $itemServices;
     }
 
-    public function itemListHomePage(){
-        return $this->itemServices->itemListHomePage();
+    public function featuredItems(){
+        return $this->itemServices->featuredItems();
+    }
+
+    public function popularItems(){
+        return $this->itemServices->popularItems();
+    }
+
+    public function latestItems(){
+        return $this->itemServices->latestItems();
+    }
+
+    public function discountedItems(){
+        return $this->itemServices->discountedItems();
     }
 
     public function itemListShopPage(Request $request){
