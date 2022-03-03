@@ -46,6 +46,11 @@ Route::get('/popularItems', [HomeItemController::class, 'popularItems']);
 Route::get('/latestItems', [HomeItemController::class, 'latestItems']);
 Route::get('/discountedItems', [HomeItemController::class, 'discountedItems']);
 
+Route::get('/sliderImages', [HomeImageController::class, 'sliderImages']);
+Route::get('/bannerTopImages', [HomeImageController::class, 'bannerTopImages']);
+Route::get('/bannerMiddleImages', [HomeImageController::class, 'bannerMiddleImages']);
+Route::get('/bannerBottomImages', [HomeImageController::class, 'bannerBottomImages']);
+Route::get('/brandLogoImages', [HomeImageController::class, 'brandLogoImages']);
 
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {

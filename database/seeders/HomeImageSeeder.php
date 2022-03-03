@@ -47,7 +47,7 @@ class HomeImageSeeder extends Seeder
         DB::table('home_images')->insert([
             'title' => 'banner-1',
             'description' => 'Description of slider image',
-            'section' => 'banner',
+            'section' => 'banner_top',
             'image' => 'http://127.0.0.1:8000/images/home/banner-1.png',
             'is_active' => '1',
             'created_at' => now(),
@@ -57,7 +57,7 @@ class HomeImageSeeder extends Seeder
         DB::table('home_images')->insert([
             'title' => 'banner-2',
             'description' => 'Description of slider image',
-            'section' => 'banner',
+            'section' => 'banner_top',
             'image' => 'http://127.0.0.1:8000/images/home/banner-2.png',
             'is_active' => '1',
             'created_at' => now(),
@@ -67,7 +67,67 @@ class HomeImageSeeder extends Seeder
         DB::table('home_images')->insert([
             'title' => 'banner-3',
             'description' => 'Description of slider image',
-            'section' => 'banner',
+            'section' => 'banner_top',
+            'image' => 'http://127.0.0.1:8000/images/home/banner-3.png',
+            'is_active' => '1',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('home_images')->insert([
+            'title' => 'banner-1',
+            'description' => 'Description of slider image',
+            'section' => 'banner_middle',
+            'image' => 'http://127.0.0.1:8000/images/home/banner-1.png',
+            'is_active' => '1',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('home_images')->insert([
+            'title' => 'banner-2',
+            'description' => 'Description of slider image',
+            'section' => 'banner_bottom',
+            'image' => 'http://127.0.0.1:8000/images/home/banner-2.png',
+            'is_active' => '1',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('home_images')->insert([
+            'title' => 'banner-3',
+            'description' => 'Description of slider image',
+            'section' => 'brand_logo',
+            'image' => 'http://127.0.0.1:8000/images/home/banner-3.png',
+            'is_active' => '1',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('home_images')->insert([
+            'title' => 'banner-1',
+            'description' => 'Description of slider image',
+            'section' => 'brand_logo',
+            'image' => 'http://127.0.0.1:8000/images/home/banner-1.png',
+            'is_active' => '1',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('home_images')->insert([
+            'title' => 'banner-2',
+            'description' => 'Description of slider image',
+            'section' => 'brand_logo',
+            'image' => 'http://127.0.0.1:8000/images/home/banner-2.png',
+            'is_active' => '1',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('home_images')->insert([
+            'title' => 'banner-3',
+            'description' => 'Description of slider image',
+            'section' => 'brand_logo',
             'image' => 'http://127.0.0.1:8000/images/home/banner-3.png',
             'is_active' => '1',
             'created_at' => now(),
