@@ -40,6 +40,12 @@ Route::post('/loginAdmin', [AuthController::class, 'loginAdmin']);
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
 Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 
+//Homepage Items
+Route::get('/featuredItems', [HomeItemController::class, 'featuredItems']);
+Route::get('/popularItems', [HomeItemController::class, 'popularItems']);
+Route::get('/latestItems', [HomeItemController::class, 'latestItems']);
+Route::get('/discountedItems', [HomeItemController::class, 'discountedItems']);
+
 
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -108,12 +114,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/itemUpdate/{id}', [ItemController::class, 'itemUpdate']);
     Route::delete('/itemDelete/{id}', [ItemController::class, 'itemDelete']);
 
-    ////Home Item
-    Route::get('/itemListHomePage', [HomeItemController::class, 'itemListHomePage']);
-    Route::get('/itemListShopPage', [HomeItemController::class, 'itemListShopPage']);
-
     Route::post('/orderCreate', [OrderController::class, 'orderCreate']);
-
 
     //Configuration
     Route::get('/config', [ConfigurationController::class, 'config']);

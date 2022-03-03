@@ -21,18 +21,20 @@ class ItemServices extends BaseServices{
     private $brandModel = Brand::class;
     private $supplierModel = Supplier::class;
 
-    public function itemListHomePage(){
-        $sections = Section::latest()->get();
-        $homepageItems = [];
-        foreach($sections as $section){
-            $items = Item::where('section_id',$section->id)->limit(8)->get();
-            $data = [
-                'section'=>$section,
-                'items'=>$items
-            ];
-            array_push($homepageItems, $data);
-        }
-        return response(["data"=>$homepageItems],200);
+    public function featuredItems(){
+        return Item::where('section','featured')->limit(8)->get();
+    }
+
+    public function popularItems(){
+        return Item::where('section','popular')->limit(8)->get();
+    }
+
+    public function latestItems(){
+        return Item::where('section','latest')->limit(8)->get();
+    }
+
+    public function discountedItems(){
+        return Item::where('section','discounted')->limit(8)->get();
     }
 
     public function itemListShopPage(){
