@@ -26,7 +26,7 @@ class ItemFormat{
             'name' => $item->name,
             'slug' => $item->slug,
             'sku' => $item->sku,
-            'price' => $item->cost,
+            'cost' => $item->cost,
             'price' => $item->price,
             'discount' => $item->discount,
             'inventory' => $item->inventory,
